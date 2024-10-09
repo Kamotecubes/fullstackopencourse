@@ -2,9 +2,7 @@ sequenceDiagram
     participant browser
     participant server
 
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa {"content":"spa timee","date":"2024-10-09T07:22:47.099Z"}
     activate server
     server-->>browser: {"message":"note created"}
     deactivate server
-
-    Note right of the browser: {"content":"spa timee","date":"2024-10-09T07:22:47.099Z"}
