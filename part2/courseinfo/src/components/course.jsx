@@ -15,15 +15,21 @@ const Part = (props) => {
     )
 }
 const Content = (props) => {
+    const {parts} = props
 
     return (
         <>
-        <Part pne={props.parts[0]}/>
-        <Part pne={props.parts[1]}/>
-        <Part pne={props.parts[2]}/>
+            {parts.map(p => <Part key={p.id} pne={p} />)}
         </>
     )
 
+}
+const Total = (props) => {
+    return (
+      <>
+        <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
+      </>
+    )
 }
 const Course = (props) => {
     const {course} = props
