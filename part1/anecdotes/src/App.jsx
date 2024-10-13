@@ -15,20 +15,32 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const [highestVote, setHighestVote] = useState(0)
+
   const rollAnecdote = () => setSelected(Math.floor(Math.random() * anecdotes.length))
 
   const vote = () => {
     const copy = [...points]
     copy[selected] += 1
     setPoints(copy)
+    if (copy[selected] > highestVote) {
+      setHighestVote(copy[selected])
+    }
+  }
+
+  const getMostVoted = () => {
+    return anecdotes[points.findIndex(item => item === highestVote)]
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
       <button onClick={vote}>vote</button>
       <button onClick={rollAnecdote}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{getMostVoted()}</p>
     </div>
   )
 }
