@@ -26,7 +26,6 @@ const Content = (props) => {
 }
 const Total = (props) => {
     const {parts} = props
-    console.log('asdqw', parts);
     
     return (
       <>
