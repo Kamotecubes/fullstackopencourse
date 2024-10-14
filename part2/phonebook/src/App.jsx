@@ -19,9 +19,15 @@ const App = () => {
 
   const addContact = (event) => {
     event.preventDefault()
-    const isExist = persons.find(p => p.name === newName)
-    if (!!isExist) {
-      alert(`${newName} is already added to phonebook`)
+    const person = persons.find(p => p.name === newName)
+    if (!!person) {
+      if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
+        personService.update(person.id, {...person, number: newNumber}).then(data => {
+          setPersons(persons.map(p => p.id === data.id ? data : p))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
     } else {
       personService.create({name: newName, number: newNumber}).then(data => {
         setPersons(persons.concat(data))
