@@ -25,7 +25,7 @@ const App = () => {
     if (!!person) {
       if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
         personService.update(person.id, {...person, number: newNumber}).then(data => {
-          setMessage(`Updated ${data.name} number`)
+          setMessage({message: `Updated ${data.name} number`, isError: false})
           setPersons(persons.map(p => p.id === data.id ? data : p))
           setNewName('')
           setNewNumber('')
@@ -36,7 +36,7 @@ const App = () => {
       }
     } else {
       personService.create({name: newName, number: newNumber}).then(data => {
-        setMessage(`Added ${data.name}`)
+        setMessage({message: `Added ${data.name}`, isError: false})
         setPersons(persons.concat(data))
         setNewName('')
         setNewNumber('')
@@ -54,6 +54,11 @@ const App = () => {
       if (window.confirm(`Delete ${person.name}?`)) {
         personService.deleteItem(person.id).then(data => {
           setPersons(persons.filter(p => p.id !== data.id))
+        }, error => {
+          setMessage({message: `Information of ${person.name} has already been removed from server`, isError: true})
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
         })
       }
     }
@@ -72,7 +77,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification message={message?.message} isError={message?.isError}/>
         <Filter searchText={searchText} handleSearchChange={handleSearchChange}/>
       <h1>add a new</h1>
       <PersonForm 
