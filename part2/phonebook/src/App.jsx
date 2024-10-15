@@ -4,12 +4,14 @@ import Filter from './components/filter'
 import PersonForm from './components/personForm'
 import Persons from './components/Persons'
 import personService from './services/person'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personService.getAll().then(data => {
@@ -23,16 +25,24 @@ const App = () => {
     if (!!person) {
       if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
         personService.update(person.id, {...person, number: newNumber}).then(data => {
+          setMessage(`Updated ${data.name} number`)
           setPersons(persons.map(p => p.id === data.id ? data : p))
           setNewName('')
           setNewNumber('')
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
         })
       }
     } else {
       personService.create({name: newName, number: newNumber}).then(data => {
+        setMessage(`Added ${data.name}`)
         setPersons(persons.concat(data))
         setNewName('')
         setNewNumber('')
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
       })
     }
     
@@ -62,6 +72,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
         <Filter searchText={searchText} handleSearchChange={handleSearchChange}/>
       <h1>add a new</h1>
       <PersonForm 
