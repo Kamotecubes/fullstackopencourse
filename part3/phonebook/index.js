@@ -73,7 +73,6 @@ app.post('/api/persons', (request, response) => {
     // }
     const id = Math.floor(Math.random() * 1000000)
 
-    persons = persons.concat(person)
     const p = new Person({...person, id})
     p.save().then(result => {
       consolr.log('person saved')
