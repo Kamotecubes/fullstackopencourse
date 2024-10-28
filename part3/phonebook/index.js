@@ -1,7 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
+const Person = require('./models/person')
 const app = express()
+
 
 
 app.use(morgan('tiny'))
@@ -11,55 +15,50 @@ app.use(express.static('dist'))
 
 app.use(cors())
 
-let persons = [
-    { 
-        "id": "1",
-        "name": "Arto Hellas", 
-        "number": "040-123456"
-      },
-      { 
-        "id": "2",
-        "name": "Ada Lovelace", 
-        "number": "39-44-5323523"
-      },
-      { 
-        "id": "3",
-        "name": "Dan Abramov", 
-        "number": "12-43-234345"
-      },
-      { 
-        "id": "4",
-        "name": "Mary Poppendieck", 
-        "number": "39-23-6423122"
-      }
-]
-
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(result => {
+    console.log('phonebook:');
+    result.forEach(p => {
+      console.log(`${p.name} ${p.number}`)
+    })
+    mongoose.connection.close()
+    response.json(result)
+  })
 })
 
 app.get('/info', (request, response) => {
     const date = new Date()
-    response.send(`<div><p>Phonebook has info for ${persons.length} people</p><p>${date.toString()}</p></div> `)
+    Person.find({}).then(result => {
+      mongoose.connection.close()
+      response.send(`<div><p>Phonebook has info for ${result.length} people</p><p>${date.toString()}</p></div> `)
+    })
+    
   })
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    const person = persons.find(person => person.id === id)
-    if (person) {
-    response.json(person)
-    } else {
-    response.status(404).end()
-    }
+    Person.find({id}).then(result => {
+      mongoose.connection.close()
+      if (result) {
+        response.json(result)
+      } else {
+      response.status(404).end()
+      }
+    })
 })
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
-  
-    response.status(204).end()
+    Person.find({id}).then(result => {
+      mongoose.connection.close()
+      if (result) {
+        response.status(204).end()
+      } else {
+      response.status(404).end()
+      }
+    })
 })
 
 app.post('/api/persons', (request, response) => {
@@ -83,7 +82,14 @@ app.post('/api/persons', (request, response) => {
     response.json(person)
   })
 
-const PORT = 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
+
+
+
+
+
+
+
