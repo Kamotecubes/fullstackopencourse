@@ -75,7 +75,6 @@ app.post('/api/persons', (request, response) => {
 
     const p = new Person({...person, id})
     p.save().then(result => {
-      consolr.log('person saved')
       mongoose.connection.close()
       response.json(person)
     })
