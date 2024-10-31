@@ -53,7 +53,7 @@ const App = () => {
     return () => {
       if (window.confirm(`Delete ${person.name}?`)) {
         personService.deleteItem(person.id).then(data => {
-          setPersons(persons.filter(p => p.id !== data.id))
+          setPersons(persons.filter(p => p.id !== person.id))
         }, error => {
           setMessage({message: `Information of ${person.name} has already been removed from server`, isError: true})
           setTimeout(() => {
