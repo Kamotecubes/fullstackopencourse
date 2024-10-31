@@ -24,14 +24,14 @@ const personSchema = new mongoose.Schema({
 const Person = mongoose.model('Person', personSchema)
 
 if (name && number) {
-  const person = new Person({name, number})
+  const person = new Person({ name, number })
   person.save().then(p => {
     console.log(`added ${p.name} number ${p.number} to phonebook`)
     mongoose.connection.close()
   })
 } else {
   Person.find({}).then(result => {
-    console.log('phonebook:');
+    console.log('phonebook:')
     result.forEach(p => {
       console.log(`${p.name} ${p.number}`)
     })
