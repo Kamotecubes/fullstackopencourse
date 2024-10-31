@@ -36,7 +36,7 @@ app.get('/info', (request, response) => {
     })
     
   })
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
     Person.find({id}).then(result => {
       if (result) {
@@ -47,7 +47,7 @@ app.get('/api/persons/:id', (request, response) => {
     })
     .catch(error => next(error))
 })
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id).then(result => {
       response.status(204).end()
     })
