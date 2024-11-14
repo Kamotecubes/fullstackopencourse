@@ -66,6 +66,24 @@ describe('blogs', () => {
     
   })
 
+  test('create', async () => {
+    const newBlog = {
+      title: "changes",
+      author: "2pac",
+      url: "asdqwe",
+      likes: 123
+    }
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+    const currentBlogs = await helper.blogsInDb()
+    assert.strictEqual(currentBlogs.length, helper.initialBlogs.length + 1)
+    const contents = currentBlogs.map(n => n.author)
+    assert(contents.includes('2pac'))
+  })
+
 })
 
 after(async () => {
