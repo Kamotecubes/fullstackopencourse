@@ -84,6 +84,14 @@ describe('blogs', () => {
     assert(contents.includes('2pac'))
   })
 
+  test('delete', async () => {
+    await api.delete('/api/blogs/5a422b3a1b54a676234d17f9').expect(204)
+
+    const currentBlogs = await helper.blogsInDb()
+    const contents = currentBlogs.map(n => n._id)
+    assert.strictEqual(currentBlogs.length, 3)
+  })
+
 })
 
 after(async () => {
