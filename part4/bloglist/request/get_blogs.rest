@@ -2,23 +2,13 @@ GET http://localhost:3001/api/blogs
 ###
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY3MzcwOGJjODgwYjFiNmFjYTZjNjI0NiIsImlhdCI6MTczMTY2OTYzOH0.bOTlqZ8Foyuzxj3o3DzhLuEwe4LdMcTRbNC8i2egXDo
 
 {
-    "title": "changes",
-    "author": "2pac",
+    "title": "skeletons",
+    "author": "travis scott",
     "url": "asdqwe",
     "likes": 123,
     "userId": "673708bc880b1b6aca6c6246"
 }
 ###
-POST http://localhost:3001/api/users
-Content-Type: application/json
-
-{
-    "username": "root",
-    "name": "Superuser",
-    "password": "salainen"
-}
-###
-GET http://localhost:3001/api/users
-Content-Type: application/json
