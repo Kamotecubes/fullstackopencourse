@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
 
   const [title, setTitle] = useState('') 
   const [author, setAuthor] = useState('') 
@@ -44,9 +46,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setMessage({message: `wrong username or password`, isError: true})
       setTimeout(() => {
-        setErrorMessage(null)
+        setMessage(null)
       }, 5000)
     }
   }
@@ -58,16 +60,27 @@ const App = () => {
 
   const handleCreateBlog = async (event) => {
     event.preventDefault()
-    const newblog = await blogService.saveBlog({title, author, url})
-    setBlogs(blogs.concat(newblog))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    try {
+      const newblog = await blogService.saveBlog({title, author, url})
+      setBlogs(blogs.concat(newblog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setMessage({message: `a new blog ${newblog.title} by ${newblog.author} added`, isError: false})
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
+
+    } catch (exception) {
+      
+    }
   }
 
   if (user === null) {
     return (
       <>
+      <h2>login to application</h2>
+      <Notification message={message?.message} isError={message?.isError}/>
       <form onSubmit={handleLogin}>
       <div>
         username
@@ -96,6 +109,7 @@ const App = () => {
   return (
     <>
         <h2>blogs</h2>
+        <Notification message={message?.message} isError={message?.isError}/>
         <p>{user.username} logged in <button onClick={handleLogout}>logout</button></p>
         <div>
           <h1>create new</h1>
