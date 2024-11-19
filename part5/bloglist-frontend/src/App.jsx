@@ -71,6 +71,11 @@ const App = () => {
     setUser(null)
   }
 
+  const addLike = async (id) => {
+    const newBlog = await blogService.addLike(id)
+    setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b))
+  }
+
   if (user === null) {
     return (
       <>
@@ -114,7 +119,7 @@ const App = () => {
         </div>
         
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} addLike={addLike}/>
         )}
     </>
   )

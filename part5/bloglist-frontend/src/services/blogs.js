@@ -19,4 +19,9 @@ const saveBlog = async data => {
   return response.data
 }
 
-export default { getAll, saveBlog, setToken }
+const addLike = async id => {
+  const response = await axios.put(`${baseUrl}/addLike/${id}`)
+  return response.data
+}
+
+export default { getAll, saveBlog, setToken, addLike }
