@@ -24,4 +24,9 @@ const addLike = async id => {
   return response.data
 }
 
-export default { getAll, saveBlog, setToken, addLike }
+const deleteBlog = async id => {
+  const response = await axios.delete(`${baseUrl}/${id}`)
+  return response.status
+}
+
+export default { getAll, saveBlog, setToken, addLike, deleteBlog }
