@@ -43,7 +43,10 @@ const App = () => {
       }, 3000)
 
     } catch (exception) {
-      
+      setMessage({message: `error`, isError: true})
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
     }
   }
 
@@ -83,7 +86,7 @@ const App = () => {
     if (confirm(`Remove blog ${blog.title} by ${blog.user.name}`)) {
       const status = await blogService.deleteBlog(blog.id)
       if (status === 204) {
-        setBlogs(blogs.filter(b => id !== b.id))
+        setBlogs(blogs.filter(b => blog.id !== b.id))
       }
     }
     
