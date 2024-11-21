@@ -15,10 +15,10 @@ const Blog = ({ blog, addLike, deleteBlog, showDelete }) => {
   }
   return (
     <div style={blogStyle}>
-      <div>
+      <div className='title'>
         {blog.title} {blog.author} <button onClick={() => setVisible(!visible)}>{visible ? 'hide' : 'view'}</button>
       </div>
-      <div style={showWhenVisible}>
+      <div className='details' style={showWhenVisible}>
         <div>{blog.url}</div>
         <div>likes {blog.likes} <button onClick={() => addLike(blog.id)}>like</button></div>
         <div>{blog?.user?.name}</div>
@@ -29,7 +29,7 @@ const Blog = ({ blog, addLike, deleteBlog, showDelete }) => {
 }
 
 Blog.propTypes = {
-  blog: PropTypes.array.isRequired,
+  blog: PropTypes.any.isRequired,
   addLike: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired,
   showDelete: PropTypes.bool.isRequired
