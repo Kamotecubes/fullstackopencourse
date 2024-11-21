@@ -4,6 +4,7 @@ import Blog from './Blog'
 
 describe('<Blog />', () => {
     let container
+    let mockaddLike
 
     beforeEach(() => {
         const blog = {
@@ -17,7 +18,7 @@ describe('<Blog />', () => {
                 id: "123"
             },
         }
-        const mockaddLike = vi.fn()
+        mockaddLike = vi.fn()
         const mockdeleteBlog = vi.fn()
         const showDelete = true
         container = render(<Blog key={blog.id} blog={blog} addLike={mockaddLike} deleteBlog={mockdeleteBlog} showDelete={showDelete}/>).container
@@ -41,6 +42,18 @@ describe('<Blog />', () => {
         const detailsDiv = container.querySelector('.details')
 
         expect(detailsDiv).not.toHaveStyle('display: none')
+    })
+
+    test('like button is clicked twice, the event handler the component received as props is called twice.', async () => {
+
+        const user = userEvent.setup()
+        const viewButton = screen.getByText('view')
+        const likeButton = screen.getByText('like')
+        await user.click(viewButton)
+        await user.click(likeButton)
+        await user.click(likeButton)
+
+        expect(mockaddLike.mock.calls).toHaveLength(2)
     })
 })
 
