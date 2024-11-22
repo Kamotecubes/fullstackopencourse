@@ -21,22 +21,42 @@ describe('Blog app', () => {
   
     describe('Login', () => {
       test('succeeds with correct credentials', async ({ page }) => {
-        const textboxes = await page.getByRole('textbox').all()
-        await textboxes[0].fill('josh')
-        await textboxes[1].fill('asdqwe')
+        await page.getByTestId('username').fill('josh')
+        await page.getByTestId('password').fill('asdqwe')
         await page.getByRole('button', { name: 'login' }).click()
 
         await expect(page.getByText('josh logged in')).toBeVisible()
       })
   
       test('fails with wrong credentials', async ({ page }) => {
-        const textboxes = await page.getByRole('textbox').all()
-        await textboxes[0].fill('josh')
-        await textboxes[1].fill('haha')
+        await page.getByTestId('username').fill('josh')
+        await page.getByTestId('password').fill('haha')
         await page.getByRole('button', { name: 'login' }).click()
 
         await expect(page.getByText('wrong username or password')).toBeVisible()
       })
+    })
+
+    describe('When logged in', () => {
+        beforeEach(async ({ page }) => {
+            await page.getByTestId('username').fill('josh')
+            await page.getByTestId('password').fill('asdqwe')
+            await page.getByRole('button', { name: 'login' }).click()
+        })
+        
+        test('a new blog can be created', async ({ page }) => {
+          const textboxes = await page.getByRole('textbox').all()
+          
+          await page.getByRole('button', { name: 'new blog' }).click()
+
+          await page.getByTestId('blogform-title').fill('POWER')
+          await page.getByTestId('blogform-author').fill('kanye')
+          await page.getByTestId('blogform-url').fill('asdqwe')
+          await page.getByRole('button', { name: 'create' }).click()
+  
+          await expect(page.getByText('POWER kanye')).toBeVisible()
+        })
+        
     })
 })
 
