@@ -4,15 +4,15 @@ const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
     beforeEach(async ({ page, request }) => {
-        await request.post('http://localhost:3001/api/testing/reset')
-        await request.post('http://localhost:3001/api/users', {
+        await request.post('/api/testing/reset')
+        await request.post('/api/users', {
             data: {
                 name: 'Joshua Icogo',
                 username: 'josh',
                 password: 'asdqwe'
             }
         })
-        await page.goto('http://localhost:5173')
+        await page.goto('/')
     })
   
     test('Login form is shown', async ({ page }) => {
@@ -38,22 +38,26 @@ describe('Blog app', () => {
         })
         
         test('a new blog can be created', async ({ page }) => {
-
             await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
-    
             await expect(page.getByText('POWER kanye')).toBeVisible()
         })
 
         test('blog can be liked.', async ({ page }) => {
-          
-            await createBlog(page, {title: 'So appaled', author: 'kanye', url: 'asdqwe'})
+          await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
             await page.getByRole('button', { name: 'view' }).click()
             await page.getByRole('button', { name: 'like' }).click()
 
             await expect(page.getByText('likes 1')).toBeVisible()
-    
-            
         })
+
+        test('user who added the blog can delete the blog', async ({ page }) => {
+          await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
+          await page.getByRole('button', { name: 'view' }).click()
+          page.on('dialog', dialog => dialog.accept());
+          await page.getByRole('button', { name: 'remove' }).click()
+
+          await expect(page.getByText('POWER kanye')).not.toBeVisible()
+      })
         
     })
 })
