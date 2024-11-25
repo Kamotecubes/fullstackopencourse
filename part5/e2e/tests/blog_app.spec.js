@@ -38,11 +38,13 @@ describe('Blog app', () => {
         })
         
         test('a new blog can be created', async ({ page }) => {
+          await page.getByRole('button', { name: 'new blog' }).click()
             await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
             await expect(page.getByText('POWER kanye')).toBeVisible()
         })
 
         test('blog can be liked.', async ({ page }) => {
+          await page.getByRole('button', { name: 'new blog' }).click()
           await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
             await page.getByRole('button', { name: 'view' }).click()
             await page.getByRole('button', { name: 'like' }).click()
@@ -51,6 +53,7 @@ describe('Blog app', () => {
         })
 
         test('user who added the blog can delete the blog', async ({ page }) => {
+          await page.getByRole('button', { name: 'new blog' }).click()
           await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
           await page.getByRole('button', { name: 'view' }).click()
           page.on('dialog', dialog => dialog.accept());
@@ -67,6 +70,7 @@ describe('Blog app', () => {
                 password: 'asdqwe'
             }
           })
+          await page.getByRole('button', { name: 'new blog' }).click()
           await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
           await page.getByRole('button', { name: 'view' }).click()
 
@@ -77,6 +81,36 @@ describe('Blog app', () => {
           await page.getByRole('button', { name: 'view' }).click()
 
           await expect(page.getByRole('button', { name: 'remove' })).not.toBeVisible()
+        })
+
+        test('blogs are arranged in the order according to the likes, the blog with the most likes first.', async ({ page }) => {
+          await page.getByRole('button', { name: 'new blog' }).click()
+          await createBlog(page, {title: 'POWER', author: 'kanye', url: 'asdqwe'})
+          const firstBlogElement = await page.getByText('POWER kanye').locator('..')
+          await firstBlogElement.getByRole('button', {name: 'view'}).click()
+          await firstBlogElement.getByRole('button', {name: 'like'}).click()
+          await firstBlogElement.getByRole('button', {name: 'like'}).click()
+          await firstBlogElement.getByRole('button', {name: 'like'}).click()
+          await firstBlogElement.getByRole('button', {name: 'like'}).click()
+
+          await createBlog(page, {title: 'All of the lights', author: 'kanye', url: 'asdqwe'})
+          const secondBlogElement = await page.getByText('All of the lights kanye').locator('..')
+          await secondBlogElement.getByRole('button', {name: 'view'}).click()
+          await secondBlogElement.getByRole('button', {name: 'like'}).click()
+          await secondBlogElement.getByRole('button', {name: 'like'}).click()
+
+          await createBlog(page, {title: 'Runaway', author: 'kanye', url: 'asdqwe'})
+          const thirdBlogElement = await page.getByText('Runaway kanye').locator('..')
+          await thirdBlogElement.getByRole('button', {name: 'view'}).click()
+          await thirdBlogElement.getByRole('button', {name: 'like'}).click()
+          await thirdBlogElement.getByRole('button', {name: 'like'}).click()
+          await thirdBlogElement.getByRole('button', {name: 'like'}).click()
+
+          const titles = await page.locator('.title').all()
+
+          await expect(titles[0]).toContainText('POWER kanye')
+          await expect(titles[1]).toContainText('Runaway kanye')
+          await expect(titles[2]).toContainText('All of the lights kanye')
         })
         
     })
