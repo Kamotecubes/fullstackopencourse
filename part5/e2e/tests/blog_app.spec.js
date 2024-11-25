@@ -45,8 +45,6 @@ describe('Blog app', () => {
         })
         
         test('a new blog can be created', async ({ page }) => {
-          const textboxes = await page.getByRole('textbox').all()
-          
           await page.getByRole('button', { name: 'new blog' }).click()
 
           await page.getByTestId('blogform-title').fill('POWER')
@@ -55,6 +53,17 @@ describe('Blog app', () => {
           await page.getByRole('button', { name: 'create' }).click()
   
           await expect(page.getByText('POWER kanye')).toBeVisible()
+        })
+
+        test('a new blog can be created', async ({ page }) => {
+            await page.getByRole('button', { name: 'new blog' }).click()
+  
+            await page.getByTestId('blogform-title').fill('So appaled')
+            await page.getByTestId('blogform-author').fill('kanye')
+            await page.getByTestId('blogform-url').fill('asdqwe')
+            await page.getByRole('button', { name: 'create' }).click()
+    
+            
         })
         
     })
