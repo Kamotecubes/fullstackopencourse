@@ -6,7 +6,7 @@ import { filterChange } from './reducers/filterReducer'
 import Filter from './components/Filter'
 
 const App = () => {
-  const anecdotes = useSelector(state => state.anecdotes.sort((a,b) => b.votes-a.votes).filter(b => b.content.includes(state.filter)))
+  const anecdotes = useSelector(state => [...state.anecdotes].sort((a,b) => b.votes-a.votes).filter(b => b.content.includes(state.filter)))
   const dispatch = useDispatch()
 
   const vote = (id) => dispatch(addVote(id))
