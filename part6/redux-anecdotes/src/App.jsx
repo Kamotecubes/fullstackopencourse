@@ -6,7 +6,7 @@ import AnecdoteList from './components/AnecdoteList'
 import { filterChange } from './reducers/filterReducer'
 import Filter from './components/Filter'
 import Notification from './components/Notification'
-import {notificationChange, removeNotif} from './reducers/notificationReducer'
+import {popNotif} from './reducers/notificationReducer'
 
 const App = () => {
  
@@ -20,10 +20,7 @@ const App = () => {
   const vote = (id) => {
     const anecdote = anecdotes.find(a => a.id === id)
     dispatch(addVote(anecdote))
-    dispatch(notificationChange(`you voted for ${anecdote.content}`))
-    setTimeout(() => {
-      dispatch(removeNotif())
-    }, 5000);
+    dispatch(popNotif(`you voted for ${anecdote.content}`, 5))
   }
 
   const handleCreate = async (content) => {
