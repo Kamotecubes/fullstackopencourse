@@ -18,8 +18,9 @@ const App = () => {
   const anecdotes = useSelector(state => [...state.anecdotes].sort((a,b) => b.votes-a.votes).filter(b => b.content.includes(state.filter)))
 
   const vote = (id) => {
-    dispatch(addVote(id))
-    dispatch(notificationChange(`you voted for ${anecdotes.find(a => a.id === id).content}`))
+    const anecdote = anecdotes.find(a => a.id === id)
+    dispatch(addVote(anecdote))
+    dispatch(notificationChange(`you voted for ${anecdote.content}`))
     setTimeout(() => {
       dispatch(removeNotif())
     }, 5000);
