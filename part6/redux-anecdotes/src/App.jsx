@@ -26,7 +26,10 @@ const App = () => {
     }, 5000);
   }
 
-  const handleCreate = (content) => dispatch(createAnecdote(content))
+  const handleCreate = async (content) => {
+    const newAnecdote = await anecdoteService.createNew(content)
+    dispatch(createAnecdote(newAnecdote))
+  }
 
   const handleFilter = (searchtxt) => dispatch(filterChange(searchtxt))
 
