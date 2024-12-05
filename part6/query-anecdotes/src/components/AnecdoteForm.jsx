@@ -1,10 +1,12 @@
-const AnecdoteForm = () => {
+import PropTypes from 'prop-types'
+const AnecdoteForm = ({handleCreate}) => {
 
   const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     console.log('new anecdote')
+    handleCreate(content)
 }
 
   return (
@@ -16,6 +18,9 @@ const AnecdoteForm = () => {
       </form>
     </div>
   )
+}
+AnecdoteForm.propTypes = {
+  handleCreate: PropTypes.func.isRequired
 }
 
 export default AnecdoteForm
