@@ -26,7 +26,11 @@ const App = () => {
     queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
     notifDispatch({type: 'DISPLAY', payload: 'anecdote created'})
     setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
-  }, })
+  }, onError: (e) => {
+    const {error} = e.response.data
+    notifDispatch({type: 'DISPLAY', payload: error})
+    setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
+  }})
 
   const result = useQuery({
     queryKey: ['anecdotes'],
