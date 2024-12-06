@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useMatch
+  Routes, Route, Link, useMatch, useNavigate
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -96,9 +96,25 @@ const Anecdote = ({anecdote}) =>
       <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
     </>
   )
+const Notification = ({notif}) => {
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1,
+    marginBottom: 5
+  }
+  if(!notif) return null
+
+  return (
+    <div style={style}>
+      {notif}
+    </div>
+  )
+}
 
 
 const App = () => {
+  const navigate = useNavigate()
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -121,6 +137,9 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout(() => setNotification(''), 5000)
+    navigate('/')
   }
 
   const anecdoteById = (id) =>
@@ -144,7 +163,7 @@ const App = () => {
       <h1>Software anecdotes</h1>
       
         <Menu />
-        
+        <Notification notif={notification}/>
         <Routes>
           <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />}></Route>
           <Route path="/create" element={<CreateNew addNew={addNew} />}></Route>
