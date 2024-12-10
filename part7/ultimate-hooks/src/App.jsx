@@ -28,7 +28,6 @@ const useResource = (baseUrl) => {
 
   const create = async (resource) => {
     const response = await axios.post(baseUrl, resource)
-    debugger
     setResources(resources.concat(response.data))
   }
 
