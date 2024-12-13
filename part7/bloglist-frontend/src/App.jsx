@@ -7,7 +7,7 @@ import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import NotificationContext from "./NotificationContext";
 import { useSelector, useDispatch } from 'react-redux'
-import { initializeBlogs, createBlog } from "./reducers/blogReducer";
+import { initializeBlogs, createBlog, incLike, removeBlog } from "./reducers/blogReducer";
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -77,16 +77,11 @@ const App = () => {
     setUser(null);
   };
 
-  const addLike = async (id) => {
-    const newBlog = await blogService.addLike(id);
-  };
+  const addLike = async (id) => dispatch(incLike(id))
 
   const deleteBlog = async (blog) => {
     if (confirm(`Remove blog ${blog.title} by ${blog.user.name}`)) {
-      const status = await blogService.deleteBlog(blog.id);
-      if (status === 204) {
-        setBlogs(blogs.filter((b) => blog.id !== b.id));
-      }
+      dispatch(removeBlog(blog.id))
     }
   };
 
