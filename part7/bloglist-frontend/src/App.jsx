@@ -6,6 +6,8 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import NotificationContext from "./NotificationContext";
+import { useSelector, useDispatch } from 'react-redux'
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -19,6 +21,7 @@ const notifReducer = (state, action) => {
 }
 
 const App = () => {
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +33,7 @@ const App = () => {
       const b = initialBlogs.sort((a, b) => b.likes - a.likes);
       setBlogs(b);
     });
+    dispatch(initializeBlogs())
   }, []);
 
   useEffect(() => {
