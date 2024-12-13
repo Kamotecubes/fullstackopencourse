@@ -8,6 +8,7 @@ import BlogForm from "./components/BlogForm";
 import NotificationContext from "./NotificationContext";
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, createBlog, incLike, removeBlog } from "./reducers/blogReducer";
+import { login, setUser } from './reducers/userReducer'
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -25,9 +26,9 @@ const App = () => {
   
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
   const  [notif, notifDispatch] = useReducer(notifReducer, '')
   const blogs = useSelector(state => [...state.blogs].sort((a, b) => b.likes - a.likes))
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -37,8 +38,7 @@ const App = () => {
     const userData = window.localStorage.getItem("user");
     if (userData) {
       const parsedUserData = JSON.parse(userData);
-      setUser(parsedUserData);
-      blogService.setToken(parsedUserData.token);
+      dispatch(setUser(parsedUserData))
     }
   }, []);
 
@@ -57,13 +57,7 @@ const App = () => {
     event.preventDefault();
 
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      window.localStorage.setItem("user", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
+      dispatch(login({ username, password }))
       setUsername("");
       setPassword("");
     } catch (exception) {
