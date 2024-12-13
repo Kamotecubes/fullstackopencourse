@@ -4,13 +4,17 @@ import blogService from '../services/blogs'
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: {},
+    initialState: null,
     reducers: {
       setUser(state, action) {
         const userData = action.payload
         window.localStorage.setItem("user", JSON.stringify(userData));
         blogService.setToken(userData.token);
         return userData
+      },
+      logoutUser(state, action) {
+        window.localStorage.removeItem("user");
+        return null
       }
     }
   })
@@ -21,6 +25,6 @@ const userSlice = createSlice({
   }
   
   
-  export const { setUser } = userSlice.actions
+  export const { setUser, logoutUser } = userSlice.actions
   export default userSlice.reducer
 

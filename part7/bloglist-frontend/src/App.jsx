@@ -8,7 +8,7 @@ import BlogForm from "./components/BlogForm";
 import NotificationContext from "./NotificationContext";
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, createBlog, incLike, removeBlog } from "./reducers/blogReducer";
-import { login, setUser } from './reducers/userReducer'
+import { login, setUser, logoutUser } from './reducers/userReducer'
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -36,6 +36,7 @@ const App = () => {
 
   useEffect(() => {
     const userData = window.localStorage.getItem("user");
+    
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       dispatch(setUser(parsedUserData))
@@ -66,10 +67,8 @@ const App = () => {
     }
   };
 
-  const handleLogout = () => {
-    window.localStorage.removeItem("user");
-    setUser(null);
-  };
+  const handleLogout = () => dispatch(logoutUser())
+
 
   const addLike = async (id) => dispatch(incLike(id))
 
