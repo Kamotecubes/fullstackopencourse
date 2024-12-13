@@ -22,17 +22,14 @@ const notifReducer = (state, action) => {
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([]);
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const  [notif, notifDispatch] = useReducer(notifReducer, '')
+  const blogs = useSelector(state => [...state.blogs].sort((a, b) => b.likes - a.likes))
 
   useEffect(() => {
-    blogService.getAll().then((initialBlogs) => {
-      const b = initialBlogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(b);
-    });
     dispatch(initializeBlogs())
   }, []);
 
@@ -48,7 +45,6 @@ const App = () => {
   const createBlog = async (blogInfo) => {
     try {
       const newblog = await blogService.saveBlog(blogInfo);
-      setBlogs(blogs.concat({ ...newblog, user: { username: user.username } }));
       notifDispatch({type: 'DISPLAY', payload: {message: `a new blog ${newblog.title} by ${newblog.author} added`,isError: false}})
       setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
     } catch (exception) {
@@ -83,11 +79,6 @@ const App = () => {
 
   const addLike = async (id) => {
     const newBlog = await blogService.addLike(id);
-    setBlogs(
-      blogs
-        .map((b) => (b.id === newBlog.id ? newBlog : b))
-        .sort((a, b) => b.likes - a.likes),
-    );
   };
 
   const deleteBlog = async (blog) => {
