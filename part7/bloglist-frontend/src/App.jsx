@@ -7,7 +7,7 @@ import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import NotificationContext from "./NotificationContext";
 import { useSelector, useDispatch } from 'react-redux'
-import { initializeBlogs } from "./reducers/blogReducer";
+import { initializeBlogs, createBlog } from "./reducers/blogReducer";
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -42,11 +42,11 @@ const App = () => {
     }
   }, []);
 
-  const createBlog = async (blogInfo) => {
+  const handlecreateBlog = async (blogInfo) => {
     try {
-      const newblog = await blogService.saveBlog(blogInfo);
-      notifDispatch({type: 'DISPLAY', payload: {message: `a new blog ${newblog.title} by ${newblog.author} added`,isError: false}})
-      setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
+      dispatch(createBlog(blogInfo))
+      // notifDispatch({type: 'DISPLAY', payload: {message: `a new blog ${newblog.title} by ${newblog.author} added`,isError: false}})
+      // setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
     } catch (exception) {
       notifDispatch({type: 'DISPLAY', payload: {message: `error`,isError: true}})
       setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
@@ -135,7 +135,7 @@ const App = () => {
         </p>
         <div>
           <Togglable buttonLabel="new blog">
-            <BlogForm createBlog={createBlog} />
+            <BlogForm createBlog={handlecreateBlog} />
           </Togglable>
         </div>
 

@@ -26,6 +26,10 @@ const blogSlice = createSlice({
     const blogs = await blogService.getAll()
     dispatch(setBlogs(blogs))
   }
+  export const createBlog = (content) => async dispatch => {
+    const blog = await blogService.saveBlog(content)
+    dispatch(appendBlog(blog))
+  }
   
   export const { setBlogs, appendBlog, addLike, deleteBlog } = blogSlice.actions
   export default blogSlice.reducer
