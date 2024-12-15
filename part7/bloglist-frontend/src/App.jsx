@@ -1,7 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
 import Blog from "./components/Blog";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
@@ -9,6 +7,7 @@ import NotificationContext from "./NotificationContext";
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, createBlog, incLike, removeBlog } from "./reducers/blogReducer";
 import { login, setUser, logoutUser } from './reducers/userReducer'
+import { popNotif } from "./reducers/notificationReducer";
 
 const notifReducer = (state, action) => {
   switch (action.type) {
@@ -29,6 +28,7 @@ const App = () => {
   const  [notif, notifDispatch] = useReducer(notifReducer, '')
   const blogs = useSelector(state => [...state.blogs].sort((a, b) => b.likes - a.likes))
   const user = useSelector(state => state.user)
+  
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -46,25 +46,18 @@ const App = () => {
   const handlecreateBlog = async (blogInfo) => {
     try {
       dispatch(createBlog(blogInfo))
-      // notifDispatch({type: 'DISPLAY', payload: {message: `a new blog ${newblog.title} by ${newblog.author} added`,isError: false}})
-      // setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
+      dispatch(popNotif({message: `a new blog ${blogInfo.title} by ${blogInfo.author} added`,isError: false}, 5))
     } catch (exception) {
-      notifDispatch({type: 'DISPLAY', payload: {message: `error`,isError: true}})
-      setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
+      dispatch(popNotif({message: `error`,isError: true}, 5))
     }
   };
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    try {
-      dispatch(login({ username, password }))
-      setUsername("");
-      setPassword("");
-    } catch (exception) {
-      notifDispatch({type: 'DISPLAY', payload: {message: 'wrong username or password',isError: true}})
-      setTimeout(() => notifDispatch({type: 'RESET'}), 5000)
-    }
+    dispatch(login({ username, password }))
+    setUsername("");
+    setPassword("");
   };
 
   const handleLogout = () => dispatch(logoutUser())
@@ -81,7 +74,6 @@ const App = () => {
   if (user === null) {
     return (
       <>
-        <NotificationContext.Provider value={[notif, notifDispatch]}>
           <h2>login to application</h2>
           <Notification />
           <form onSubmit={handleLogin}>
@@ -107,8 +99,6 @@ const App = () => {
             </div>
             <button type="submit">login</button>
           </form>
-        </NotificationContext.Provider>
-        
       </>
     );
   }
