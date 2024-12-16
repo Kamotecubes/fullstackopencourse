@@ -1,31 +1,17 @@
-import { useState, useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
-import NotificationContext from "./NotificationContext";
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, createBlog, incLike, removeBlog } from "./reducers/blogReducer";
 import { login, setUser, logoutUser } from './reducers/userReducer'
 import { popNotif } from "./reducers/notificationReducer";
+import Login from "./components/Login";
 
-const notifReducer = (state, action) => {
-  switch (action.type) {
-    case 'DISPLAY':
-      return action.payload
-    case 'RESET':
-      return ''
-    default:
-      return ''
-  }
-}
 
 const App = () => {
   const dispatch = useDispatch()
-  
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const  [notif, notifDispatch] = useReducer(notifReducer, '')
   const blogs = useSelector(state => [...state.blogs].sort((a, b) => b.likes - a.likes))
   const user = useSelector(state => state.user)
   
@@ -52,12 +38,9 @@ const App = () => {
     }
   };
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (username, password) => {
 
     dispatch(login({ username, password }))
-    setUsername("");
-    setPassword("");
   };
 
   const handleLogout = () => dispatch(logoutUser())
@@ -74,38 +57,13 @@ const App = () => {
   if (user === null) {
     return (
       <>
-          <h2>login to application</h2>
-          <Notification />
-          <form onSubmit={handleLogin}>
-            <div>
-              username
-              <input
-                data-testid="username"
-                type="text"
-                value={username}
-                name="Username"
-                onChange={({ target }) => setUsername(target.value)}
-              />
-            </div>
-            <div>
-              password
-              <input
-                data-testid="password"
-                type="password"
-                value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-              />
-            </div>
-            <button type="submit">login</button>
-          </form>
+          <Login handleLogin={handleLogin} />
       </>
     );
   }
 
   return (
     <>
-      <NotificationContext.Provider value={[notif, notifDispatch]}>
         <h2>blogs</h2>
         <Notification />
         <p>
@@ -126,8 +84,6 @@ const App = () => {
             showDelete={blog.user.username === user.username}
           />
         ))}
-      </NotificationContext.Provider>
-      
     </>
   );
 };
