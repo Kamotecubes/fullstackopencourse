@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { login, setUser } from './reducers/userReducer'
 import Login from "./components/Login";
@@ -9,11 +9,19 @@ import {
 import {  logoutUser } from './reducers/userReducer'
 import Notification from "./components/Notification";
 import Users from "./components/Users"
+import User from "./components/User"
+import userService from "./services/users"
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
   const handleLogout = () => dispatch(logoutUser())
+  const [users, setUsers] = useState([])
+
+  const match = useMatch('/users/:id')
+  const selectedUser =  match 
+  ? users.find(u => u.id === match.params.id)
+  : null
 
 
   useEffect(() => {
@@ -24,6 +32,16 @@ const App = () => {
       dispatch(setUser(parsedUserData))
     }
   }, []);
+ 
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const data = await userService.getUsers()
+            setUsers(data)
+            
+        }
+        fetchUsers()
+    }, [])
 
   const handleLogin = async (username, password) => {
 
@@ -47,7 +65,8 @@ const App = () => {
             </p>
       <Routes>
         <Route path='/' element={<BlogPage />}></Route>
-        <Route path='/users' element={<Users />}></Route>
+        <Route path='/users' element={<Users users={users} />}></Route>
+        <Route path='/users/:id' element={<User user={selectedUser} />}></Route>
       </Routes>
         
     </>
