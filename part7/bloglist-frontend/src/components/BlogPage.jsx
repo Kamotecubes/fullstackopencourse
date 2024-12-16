@@ -1,11 +1,10 @@
-import Notification from "./Notification";
 import { useEffect } from "react";
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
 import Blog from "./Blog";
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, createBlog, incLike, removeBlog } from "../reducers/blogReducer";
-import {  logoutUser } from '../reducers/userReducer'
+
 import { popNotif } from "../reducers/notificationReducer";
 
 const BlogPage = () => {
@@ -26,7 +25,7 @@ const BlogPage = () => {
           dispatch(popNotif({message: `error`,isError: true}, 5))
         }
       };
-    const handleLogout = () => dispatch(logoutUser())
+    
     const addLike = async (id) => dispatch(incLike(id))
     
       const deleteBlog = async (blog) => {
@@ -37,11 +36,7 @@ const BlogPage = () => {
 
     return (
         <>
-            <h2>blogs</h2>
-            <Notification />
-            <p>
-              {user.username} logged in <button onClick={handleLogout}>logout</button>
-            </p>
+            
             <div>
               <Togglable buttonLabel="new blog">
                 <BlogForm createBlog={handlecreateBlog} />

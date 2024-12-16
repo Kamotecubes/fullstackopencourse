@@ -6,11 +6,14 @@ import BlogPage from "./components/BlogPage"
 import {
   Routes, Route, Link, useMatch, useNavigate
 } from 'react-router-dom'
-
+import {  logoutUser } from './reducers/userReducer'
+import Notification from "./components/Notification";
+import Users from "./components/Users"
 
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+  const handleLogout = () => dispatch(logoutUser())
 
 
   useEffect(() => {
@@ -37,8 +40,14 @@ const App = () => {
 
   return (
     <>
+    <h2>blogs</h2>
+            <Notification />
+            <p>
+              {user.username} logged in <button onClick={handleLogout}>logout</button>
+            </p>
       <Routes>
         <Route path='/' element={<BlogPage />}></Route>
+        <Route path='/users' element={<Users />}></Route>
       </Routes>
         
     </>
