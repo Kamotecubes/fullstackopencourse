@@ -12,3 +12,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
     "userId": "673708bc880b1b6aca6c6246"
 }
 ###
+POST http://localhost:3001/api/blogs/67372f04de0ae55028556a78/comments
+Content-Type: application/json
+
+{
+    "body": "aaaaaaaaaa",
+    "date": "Mon Dec 16 2024 13:45:10 GMT+0800 (Philippine Standard Time)"
+}
