@@ -58,23 +58,23 @@ const App = () => {
   }
 
   return (
-    <>
-    <div>
-      <Link to="/">blogs</Link>&nbsp;
-      <Link to="/users">users</Link>&nbsp;
-      {user.username} logged in <button onClick={handleLogout}>logout</button>
-    </div>
-    <h2>blogs app</h2>
-            <Notification />
-            
-      <Routes>
-        <Route path='/' element={<BlogPage />}></Route>
-        <Route path='/users' element={<Users users={users} />}></Route>
-        <Route path='/users/:id' element={<User user={selectedUser} />}></Route>
-        <Route path='/blogs/:id' element={<BlogView />}></Route>
-      </Routes>
+    <div className="container">
+      <div>
+        <Link to="/">blogs</Link>&nbsp;
+        <Link to="/users">users</Link>&nbsp;
+        {user.username} logged in <button onClick={handleLogout}>logout</button>
+      </div>
+      <h2>blogs app</h2>
+              <Notification />
+              
+        <Routes>
+          <Route path='/' element={<BlogPage />}></Route>
+          <Route path='/users' element={<Users users={users} />}></Route>
+          <Route path='/users/:id' element={<User user={selectedUser} />}></Route>
+          <Route path='/blogs/:id' element={<BlogView />}></Route>
+        </Routes>
         
-    </>
+    </div>
   );
 };
 

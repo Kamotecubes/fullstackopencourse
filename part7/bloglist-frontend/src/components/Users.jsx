@@ -1,13 +1,14 @@
 import {
     Routes, Route, Link, useMatch, useNavigate
   } from 'react-router-dom'
+  import { Table } from 'react-bootstrap'
 const Users = ({users}) => {
 
     return (
         <>
             <h2>Users</h2>
 
-            <table>
+            <Table striped>
                 <thead>
                     <tr>
                     <th scope="col"></th>
@@ -23,7 +24,7 @@ const Users = ({users}) => {
                     })}
                     
                 </tbody>
-            </table>
+            </Table>
 
         </>
     )
