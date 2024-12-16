@@ -59,11 +59,14 @@ const App = () => {
 
   return (
     <>
-    <h2>blogs</h2>
+    <div>
+      <Link to="/">blogs</Link>&nbsp;
+      <Link to="/users">users</Link>&nbsp;
+      {user.username} logged in <button onClick={handleLogout}>logout</button>
+    </div>
+    <h2>blogs app</h2>
             <Notification />
-            <p>
-              {user.username} logged in <button onClick={handleLogout}>logout</button>
-            </p>
+            
       <Routes>
         <Route path='/' element={<BlogPage />}></Route>
         <Route path='/users' element={<Users users={users} />}></Route>
